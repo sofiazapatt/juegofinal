@@ -1,27 +1,38 @@
 using UnityEngine;
 
-public class Pergamino : MonoBehaviour
+public class InteraccionPergamino : MonoBehaviour
 {
-    // Arrastra aquí tu PanelControles desde la jerarquía
-    public GameObject PanelControles; 
+    // Esta es la variable que guardará el panel grande de la interfaz
+    [SerializeField] private GameObject panelPergaminoGrande;
 
+    // Se activa automáticamente cuando el personaje entra en el área del pergamino
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Verifica si lo que tocó el pergamino es el personaje
-        if (other.CompareTag("Player")) 
+        // Comprobamos si el objeto que entró es el jugador (puedes usar el Tag "Player")
+        if (other.CompareTag("Player"))
         {
-            PanelControles.SetActive(true); // Muestra la imagen
-            Time.timeScale = 1f; // Opcional: Pausa el juego
+            MostrarPanel(true);
         }
     }
 
-    void Update()
+    // Se activa automáticamente cuando el personaje se aleja del pergamino
+    private void OnTriggerExit2D(Collider2D other)
     {
-        // Cerrar la imagen si presionas una tecla (ej. Escape o E)
-        if (PanelControles.activeSelf && Input.GetKeyDown(KeyCode.E))
+        if (other.CompareTag("Player"))
         {
-            PanelControles.SetActive(false);
-            Time.timeScale = 1f; // Reanuda el juego
+            MostrarPanel(false);
+        }
+    }
+
+    private void MostrarPanel(bool estado)
+    {
+        if (panelPergaminoGrande != null)
+        {
+            panelPergaminoGrande.SetActive(estado);
+        }
+        else
+        {
+            Debug.LogError("¡Ojo! No has arrastrado el Panel al Inspector de este pergamino.");
         }
     }
 }
